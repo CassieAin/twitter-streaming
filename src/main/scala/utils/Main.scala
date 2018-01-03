@@ -8,17 +8,14 @@ import twitter4j.conf.ConfigurationBuilder
 object Main{
 
   def main(args: Array[String]): Unit = {
-    val conf = ConfigFactory.load("twitter-authorization.conf")
-    val consumerKey = conf.getString("twitter.consumer.key")
-    val consumerSecret = conf.getString("twitter.consumer.secret")
-    val accessToken = conf.getString("twitter.access.token")
-    val accessTokenSecret = conf.getString("twitter.access.secret")
+    lazy val config = ConfigFactory.load("application.conf")
+    val twitterConf = config.getConfig("twitter")
 
     val configuration = new ConfigurationBuilder()
-      .setOAuthConsumerKey(consumerKey)
-      .setOAuthConsumerSecret(consumerSecret)
-      .setOAuthAccessToken(accessToken)
-      .setOAuthAccessTokenSecret(accessTokenSecret)
+      .setOAuthConsumerKey(twitterConf.getString("consumerKey"))
+      .setOAuthConsumerSecret(twitterConf.getString("consumerSecret"))
+      .setOAuthAccessToken(twitterConf.getString("token"))
+      .setOAuthAccessTokenSecret(twitterConf.getString("tokenSecret"))
       .build
 
     val twitterStream = new TwitterStreamFactory(configuration)
