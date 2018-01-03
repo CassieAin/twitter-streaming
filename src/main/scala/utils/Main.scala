@@ -26,7 +26,6 @@ object Main{
 
     val counter = new Counter
     twitterStream.addListener(counter)
-//    twitterStream.filter(new FilterQuery().track("scala"))
     twitterStream.sample
     Thread.sleep(10000)
     twitterStream.cleanUp
