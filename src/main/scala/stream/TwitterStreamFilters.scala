@@ -8,7 +8,6 @@ object TwitterStreamFilters {
 
   def startTwitterStream(twitterStream: TwitterStream) = {
 
-
   }
 
   def closeTwitterStream(twitterStream: TwitterStream) = {
