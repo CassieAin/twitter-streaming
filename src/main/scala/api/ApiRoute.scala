@@ -6,5 +6,12 @@ import db.Databases
 trait ApiRoute extends Databases{
     val routes = pathSingleSlash {
         complete("hello")
-    }
+    } ~
+      pathPrefix("tweets") {
+        pathSingleSlash {
+          get {
+              complete("")
+            }
+          }
+        }
 }
