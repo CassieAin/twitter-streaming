@@ -1,9 +1,12 @@
 package utils
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import api.ApiRoute
 import stream.{Counter, TwitterStreamFilters}
+
+import scala.io.StdIn
 
 object Main extends ApiRoute {
 
@@ -15,15 +18,15 @@ object Main extends ApiRoute {
     val twitterStream = TwitterStreamFilters.configureTwitterStream()
     val counter = new Counter
     twitterStream.addListener(counter)
-//    val bindingFuture = Http().bindAndHandle(routes, "localhost", 8080)
-//    println("Server started!")
-//    StdIn.readLine()
-//    bindingFuture
-//      .flatMap(_.unbind())
-//      .onComplete(_ => system.terminate())
+    val bindingFuture = Http().bindAndHandle(routes, "localhost", 8080)
+    println("Server started!")
+    StdIn.readLine()
+    bindingFuture
+      .flatMap(_.unbind())
+      .onComplete(_ => system.terminate())
 
 
-        TwitterStreamFilters.getTwitterStream(twitterStream)
+//        TwitterStreamFilters.getTwitterStream(twitterStream)
 //    TwitterStreamFilters.filterTwitterStreamByWord(twitterStream, Array("christmas", "scala"))
 //    TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(534563976, 17765013, 526339343,
 //      18318677, 15612251, 14706299, 345673106))
@@ -32,7 +35,7 @@ object Main extends ApiRoute {
     //    val locationBox = Array(Array(-97.8,30.25),Array(-97.65,30.35))
     //    TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
 
-    TwitterStreamFilters.closeTwitterStream(twitterStream)
+//    TwitterStreamFilters.closeTwitterStream(twitterStream)
   }
 
 
