@@ -1,35 +1,39 @@
 package utils
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import api.ApiRoute
+import stream.{Counter, TwitterStreamFilters}
 
-import scala.io.StdIn
-
-object Main  extends ApiRoute{
+object Main extends ApiRoute {
 
   def main(args: Array[String]): Unit = {
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
     implicit val executionContext = system.dispatcher
 
-    val bindingFuture = Http().bindAndHandle(routes, "localhost", 8080)
-    println("Server started!")
-    StdIn.readLine()
-    bindingFuture
-      .flatMap(_.unbind())
-      .onComplete(_ => system.terminate())
+    val twitterStream = TwitterStreamFilters.configureTwitterStream()
+    val counter = new Counter
+    twitterStream.addListener(counter)
+//    val bindingFuture = Http().bindAndHandle(routes, "localhost", 8080)
+//    println("Server started!")
+//    StdIn.readLine()
+//    bindingFuture
+//      .flatMap(_.unbind())
+//      .onComplete(_ => system.terminate())
 
-//    val twitterStream = TwitterStreamFilters.configureTwitterStream()
-//    val counter = new Counter
-//    twitterStream.addListener(counter)
-    //    getTwitterStream(twitterStream)
-    //    filterTwitterStreamByWord(twitterStream, "christmas")
-    //    filterTwitterStreamByUserID(twitterStream,534563976)
-    //    filterTwitterStreamByLocation(twitterStream, Array(-97.8,30.25))
-    //    filterTwitterStreamByHashtag(twitterStream, "christmas")
-//    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, "christmas")
-//    TwitterStreamFilters.closeTwitterStream(twitterStream)
+
+        TwitterStreamFilters.getTwitterStream(twitterStream)
+//    TwitterStreamFilters.filterTwitterStreamByWord(twitterStream, Array("christmas", "scala"))
+//    TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(534563976, 17765013, 526339343,
+//      18318677, 15612251, 14706299, 345673106))
+    //        TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("christmas", "new year"))
+    //    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("#christmas"))
+    //    val locationBox = Array(Array(-97.8,30.25),Array(-97.65,30.35))
+    //    TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
+
+    TwitterStreamFilters.closeTwitterStream(twitterStream)
   }
+
+
 }

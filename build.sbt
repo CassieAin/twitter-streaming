@@ -5,7 +5,7 @@ version := "0.1"
 scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
-  "org.twitter4j" % "twitter4j-stream" % "4.0.6",
+  "org.twitter4j" % "twitter4j-stream" % "3.0.6",
   "com.vdurmont" % "emoji-java" % "4.0.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
