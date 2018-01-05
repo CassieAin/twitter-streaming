@@ -1,10 +1,14 @@
 package stream
 
+import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.stream._
 import akka.stream.scaladsl._
 import twitter4j.{Status, StatusAdapter}
+
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 class Counter extends StatusAdapter{
 
@@ -21,13 +25,13 @@ class Counter extends StatusAdapter{
     overflowStrategy
   )
 
-  val graph = statusSource
-    .log("QUEUED", {status => status.getText})
-    .to(Sink.ignore)
+  val sink: Sink[Any, Future[Done]] = Sink.foreach(println)
+  val flow: Flow[Status, String, NotUsed] = Flow[Status].map(status => status.getText)
+
+  val graph = statusSource via flow to sink
   val queue = graph.run()
 
   override def onStatus(status: Status) =
-//    Await.result(queue.offer(status), Duration.Inf)
-    println(status.getText())
-
+    Await.result(queue.offer(status), Duration.Inf)
+//    println(status.getText())
 }
