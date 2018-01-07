@@ -5,12 +5,13 @@ import akka.event.Logging
 import akka.stream._
 import akka.stream.scaladsl._
 import akka.{Done, NotUsed}
+import db.Databases
 import twitter4j.{Status, StatusAdapter}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class Counter extends StatusAdapter{
+class Counter extends StatusAdapter with Databases{
   implicit val system = ActorSystem("TweetsExtractor")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
