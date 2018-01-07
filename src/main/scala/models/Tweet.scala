@@ -2,18 +2,16 @@ package models
 import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.Future
 
-case class Tweet(tweetId: Long, author: Long, text: String, location: Long)
+case class Tweet(tweetId: Long, author: Long, text: String)
 
 class TweetTable(tag: Tag) extends Table[Tweet](tag, "tweets"){
   val tweetId = column[Long]("tweetId", O.PrimaryKey, O.AutoInc)
   val author = column[Long]("author")
   val text = column[String]("text")
-  val location = column[Long]("location")
 
-  val locationFk = foreignKey("location_id_fk", location, TableQuery[Location])(_.locationId)
   val authorFk = foreignKey("author_id_fk", author, TableQuery[Author])(_.userId)
 
-  def * = (tweetId, author, text, location) <> (Tweet.apply _ tupled, Tweet.unapply)
+  def * = (tweetId, author, text) <> (Tweet.apply _ tupled, Tweet.unapply)
 }
 
 object TweetTable{

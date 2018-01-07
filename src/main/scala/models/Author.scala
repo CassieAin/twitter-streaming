@@ -4,14 +4,15 @@ import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.Future
 
-case class Author(userId: Long, username: String, followersCount: Int)
+case class Author(userId: Long, username: String, location: String, followersCount: Int)
 
 class AuthorTable(tag: Tag) extends Table[Author](tag, "authors"){
   val userId = column[Long]("userId", O.PrimaryKey, O.AutoInc)
   val username = column[String]("username")
+  val location = column[String]("location")
   val followersCount = column[Int]("followersCount")
 
-  def * = (userId, username, followersCount) <> (Author.apply _ tupled, Author.unapply)
+  def * = (userId, username, location, followersCount) <> (Author.apply _ tupled, Author.unapply)
 }
 
 object AuthorTable{

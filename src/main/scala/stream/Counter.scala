@@ -26,7 +26,7 @@ class Counter extends StatusAdapter with Databases{
     bufferSize,
     overflowStrategy
   )
-  
+
   val createTweetTable = TweetTable.table.schema.create
   val createAuthorTable = AuthorTable.table.schema.create
   val createLocationTable = LocationTable.table.schema.create
