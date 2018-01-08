@@ -7,9 +7,11 @@ Done:
 2. Extract all tweets in real-tme
 3. Extract filtered tweets by parameters like - locations, users, hashtags, keywords
 4. Design API
+5. Configure connection to PostgreSQL
+6. Create entities Tweet, Author, Location for tables
+7. Create repositories for tables 
 
 To-do
-1. Design database and choose PostgreSQL or MongoDB
-2. Stream tweeеts into the database (no idea how yet)
-3. Get all the tweets using Slick (probably)
-4. Add specified method into the API for each request
+1. Stream tweeеts into the database (in the process)
+2. Get all the tweets using Slick 
+3. Add specified method into the API for each request
