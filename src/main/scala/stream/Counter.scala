@@ -11,7 +11,6 @@ import twitter4j.{Status, StatusAdapter}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import slick.jdbc.PostgresProfile.api._
 
 class Counter extends StatusAdapter with Databases{
   implicit val system = ActorSystem("TweetsExtractor")
@@ -27,20 +26,25 @@ class Counter extends StatusAdapter with Databases{
     overflowStrategy
   )
 
-  val createTweetTable = TweetTable.table.schema.create
-  val createAuthorTable = AuthorTable.table.schema.create
-  val createLocationTable = LocationTable.table.schema.create
-
-  val sink: Sink[Any, Future[Done]] = Sink.foreach(println)
   val flow: Flow[Status, String, NotUsed] = Flow[Status].map(status => status.getText)
-  val graph = statusSource via flow to sink
-  val queue = graph.run()
+  val sink: Sink[Any, Future[Done]] = Sink.foreach(println)
 
+  val insertFlow: Flow[Status, Tweet, NotUsed] =
+    Flow[Status].map(status => Tweet(status.getId, status.getUser.getId, status.getText, status.getLang,
+      status.getFavoriteCount, status.getRetweetCount))
+//status.getPlace.getName,
+  val insertSink: Sink[Tweet, Future[Done]] = Sink.foreach(tweetRepository.create)
+
+  val graph = statusSource via flow to sink
+  val queuePrint = graph.run()
+
+  val insertGraph = statusSource via insertFlow to insertSink
 //  val insertSink = Source[Status] foreach tweetRepository.create(_)
 //  val insertGraph = statusSource runWith insertSink
+  val queueInsert = insertGraph.run()
 
   override def onStatus(status: Status) = {
-    Await.result(queue.offer(status), Duration.Inf)
+    Await.result(queueInsert.offer(status), Duration.Inf)
     //    println(status.getText())
   }
 }
