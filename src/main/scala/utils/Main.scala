@@ -29,8 +29,7 @@ object Main extends ApiRoute {
       .flatMap(_.unbind())
       .onComplete(_ => system.terminate())
 
-//    createTable()
-//    new DAO().selectTweetsByAuthor(19243303) 375416840
+//    createTable()]]
 
   }
   val createTweetTable = TweetTable.table.schema.create
@@ -38,17 +37,17 @@ object Main extends ApiRoute {
   def createTable() =
     Await.result(db.run(DBIO.seq(createTweetTable)), Duration.Inf)
 
-  /*
+  def filterTweets() = {
     TwitterStreamFilters.getTwitterStream(twitterStream)
     TwitterStreamFilters.closeTwitterStream(twitterStream)
 
     TwitterStreamFilters.filterTwitterStreamByWord(twitterStream, Array("christmas", "scala"))
     TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(534563976, 17765013, 526339343,
       18318677, 15612251, 14706299, 345673106))
-            TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("christmas", "new year"))
-        TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("#christmas"))
-        val locationBox = Array(Array(-97.8,30.25),Array(-97.65,30.35))
-        TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
-
-   */
+    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("christmas", "new year"))
+    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("#christmas"))
+    val locationBox = Array(Array(-97.8, 30.25), Array(-97.65, 30.35))
+    TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
+//375416840 19243303 3268678291
+  }
 }
