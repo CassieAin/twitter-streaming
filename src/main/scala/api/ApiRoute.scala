@@ -7,6 +7,7 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import stream.{Counter, TwitterStreamFilters}
 
+
 trait ApiRoute extends Databases with FailFastCirceSupport {
   val twitterStream = TwitterStreamFilters.configureTwitterStream()
   val counter = new Counter
@@ -14,8 +15,8 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
 
   val routes = pathPrefix("tweets") {
     pathSingleSlash {
-      complete("hello")
-      onSuccess(new DAO().selectFirstTwentyTweets()) {
+
+      onSuccess(new DAO().selectFirstTweets()) {
         result => complete(result.asJson)
       }
     }
@@ -27,10 +28,19 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
             onSuccess(new DAO().selectTweetsByAuthor(userId)) {
               result => complete(result.asJson)
             }
-            //            onSuccess(Future.successful(TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(userId)))) {
-            //              result => complete(result)
-            //              complete(StatusCodes.OK)
-          }
-      } 
+//            onSuccess(Future.successful(TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(userId)))) {
+//              result =>
+//                complete(result)
+//                complete(StatusCodes.OK)
+            }
+          } ~
+            pathPrefix(Segment) {
+              language: String =>
+                get {
+                  onSuccess(new DAO().selectTweetsByLanguage(language)) {
+                    result => complete(result.asJson)
+                  }
+                }
+            }
+      }
     }
-}

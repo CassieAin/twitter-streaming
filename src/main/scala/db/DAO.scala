@@ -21,9 +21,9 @@ class DAO extends Databases{
     db.run(queryTweetsByLanguage.result)
   }
 
-  def selectFirstTwentyTweets() = {
-    val queryFirstTwentyTweets = TweetTable.table.take(20)
+  def selectFirstTweets() = {
+    val queryFirstTweets = TweetTable.table.take(50)
 
-    db.run(queryFirstTwentyTweets.result)
+    db.run(queryFirstTweets.result)
   }
 }
