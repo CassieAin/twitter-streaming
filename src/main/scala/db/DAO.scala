@@ -8,7 +8,6 @@ class DAO extends Databases {
   def selectTweetsByAuthor(userId: Long) = {
     val queryTweetsByAuthor = TweetTable.table
       .filter(_.author === userId)
-      .take(1)
 
     db.run(queryTweetsByAuthor.result)
   }
@@ -24,7 +23,6 @@ class DAO extends Databases {
   def selectTweetsByLocation(location: String) = {
     val queryTweetsByAuthor = TweetTable.table
       .filter(_.location === location)
-    //      .take(1)
 
     db.run(queryTweetsByAuthor.result)
   }
@@ -33,5 +31,13 @@ class DAO extends Databases {
     val queryFirstTweets = TweetTable.table.take(50)
 
     db.run(queryFirstTweets.result)
+  }
+
+  def selectTweetsByWord(word: String) = {
+    val queryTweetsByWord = for {
+      tweet <- TweetTable.table if tweet.text like "%"+word+"%"
+    } yield (tweet)
+
+    db.run(queryTweetsByWord.result)
   }
 }
