@@ -40,4 +40,8 @@ class DAO extends Databases {
 
     db.run(queryTweetsByWord.result)
   }
+
+  def selectTweetsByHashtag(word: String) = {
+    selectTweetsByWord("#"+word)
+  }
 }
