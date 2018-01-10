@@ -3,7 +3,7 @@ package db
 import models._
 import slick.jdbc.PostgresProfile.api._
 
-class DAO extends Databases{
+class DAO extends Databases {
 
   def selectTweetsByAuthor(userId: Long) = {
     val queryTweetsByAuthor = TweetTable.table
@@ -19,6 +19,14 @@ class DAO extends Databases{
       .take(20)
 
     db.run(queryTweetsByLanguage.result)
+  }
+
+  def selectTweetsByLocation(location: String) = {
+    val queryTweetsByAuthor = TweetTable.table
+      .filter(_.location === location)
+    //      .take(1)
+
+    db.run(queryTweetsByAuthor.result)
   }
 
   def selectFirstTweets() = {
