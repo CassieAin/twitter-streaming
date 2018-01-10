@@ -15,7 +15,6 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
 
   val routes = pathPrefix("tweets") {
     pathSingleSlash {
-
       onSuccess(new DAO().selectFirstTweets()) {
         result => complete(result.asJson)
       }
@@ -28,19 +27,25 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
             onSuccess(new DAO().selectTweetsByAuthor(userId)) {
               result => complete(result.asJson)
             }
-//            onSuccess(Future.successful(TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(userId)))) {
-//              result =>
-//                complete(result)
-//                complete(StatusCodes.OK)
+          }
+      } ~
+        pathPrefix(Segment) {
+          language: String =>
+            get {
+              onSuccess(new DAO().selectTweetsByLanguage(language)) {
+                result => complete(result.asJson)
+              }
             }
-          } ~
-            pathPrefix(Segment) {
-              language: String =>
-                get {
-                  onSuccess(new DAO().selectTweetsByLanguage(language)) {
-                    result => complete(result.asJson)
-                  }
-                }
+        }
+    } ~
+    pathPrefix("locations") {
+      pathPrefix(Segment) {
+        location: String =>
+          get {
+            onSuccess(new DAO().selectTweetsByLocation(location)) {
+              result => complete(result.asJson)
             }
+          }
       }
     }
+}
