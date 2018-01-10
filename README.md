@@ -8,10 +8,12 @@ Done:
 3. Extract filtered tweets by parameters like - locations, users, hashtags, keywords
 4. Design API
 5. Configure connection to PostgreSQL
-6. Create entities Tweet, Author, Location for tables
-7. Create repositories for tables 
+6. Create entity and repository Tweet for table
+7. Stream tweeеts into the database in batches
+8. Get all the tweets using Slick 
+9. Add specified method into the API for each request
 
 To-do
-1. Stream tweeеts into the database (in the process)
-2. Get all the tweets using Slick 
-3. Add specified method into the API for each request
+1. Add methods for requesting tweets by keywords
+2. Add methods for requesting tweets by location
+
