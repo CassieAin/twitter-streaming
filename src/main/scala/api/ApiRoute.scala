@@ -57,5 +57,15 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
             }
           }
       }
+    } ~
+    pathPrefix("hashtags") {
+      pathPrefix(Segment) {
+        word: String =>
+          get {
+            onSuccess(new DAO().selectTweetsByHashtag(word)) {
+              result => complete(result.asJson)
+            }
+          }
+      }
     }
 }
