@@ -31,20 +31,22 @@ class Counter extends StatusAdapter with Databases{
 
   val insertFlow: Flow[Status, Tweet, NotUsed] =
     Flow[Status].map(status => Tweet(status.getId, status.getUser.getId, status.getText, status.getLang,
-      status.getFavoriteCount, status.getRetweetCount))
-//status.getPlace.getName,
+      status.getFavoriteCount, status.getRetweetCount, status.getUser.getLocation))
   val insertSink: Sink[Tweet, Future[Done]] = Sink.foreach(tweetRepository.create)
+  val batchInsertSink: Sink[Seq[Tweet], Future[Done]] = Sink.foreach(tweetRepository.createInBatch)
 
   val graph = statusSource via flow to sink
   val queuePrint = graph.run()
 
   val insertGraph = statusSource via insertFlow to insertSink
-//  val insertSink = Source[Status] foreach tweetRepository.create(_)
-//  val insertGraph = statusSource runWith insertSink
   val queueInsert = insertGraph.run()
 
+  val batchSize = 10
+  val batchInsertGraph = statusSource via insertFlow.grouped(batchSize) to batchInsertSink
+  val queueBatchInsert = insertGraph.run()
+
   override def onStatus(status: Status) = {
-    Await.result(queueInsert.offer(status), Duration.Inf)
+    Await.result(queueBatchInsert.offer(status), Duration.Inf)
     //    println(status.getText())
   }
 }

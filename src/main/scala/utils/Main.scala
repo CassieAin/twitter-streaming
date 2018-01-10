@@ -29,8 +29,8 @@ object Main extends ApiRoute {
       .flatMap(_.unbind())
       .onComplete(_ => system.terminate())
 
-//    createTable()]]
-
+//    createTable()
+//    filterTweets()
   }
   val createTweetTable = TweetTable.table.schema.create
 
@@ -41,13 +41,13 @@ object Main extends ApiRoute {
     TwitterStreamFilters.getTwitterStream(twitterStream)
     TwitterStreamFilters.closeTwitterStream(twitterStream)
 
-    TwitterStreamFilters.filterTwitterStreamByWord(twitterStream, Array("christmas", "scala"))
-    TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(534563976, 17765013, 526339343,
-      18318677, 15612251, 14706299, 345673106))
-    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("christmas", "new year"))
-    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("#christmas"))
-    val locationBox = Array(Array(-97.8, 30.25), Array(-97.65, 30.35))
-    TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
+//    TwitterStreamFilters.filterTwitterStreamByWord(twitterStream, Array("christmas", "scala"))
+//    TwitterStreamFilters.filterTwitterStreamByUserID(twitterStream, Array(534563976, 17765013, 526339343,
+//      18318677, 15612251, 14706299, 345673106))
+//    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("christmas", "new year"))
+//    TwitterStreamFilters.filterTwitterStreamByHashtag(twitterStream, Array("#christmas"))
+//    val locationBox = Array(Array(-97.8, 30.25), Array(-97.65, 30.35))
+//    TwitterStreamFilters.filterTwitterStreamByLocation(twitterStream, locationBox)
 //375416840 19243303 3268678291
   }
 }
