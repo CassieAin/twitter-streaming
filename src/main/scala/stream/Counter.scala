@@ -12,7 +12,7 @@ import twitter4j.{Status, StatusAdapter}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class Counter extends StatusAdapter with Databases{
+class Counter extends StatusAdapter with Databases {
   implicit val system = ActorSystem("TweetsExtractor")
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
@@ -45,8 +45,6 @@ class Counter extends StatusAdapter with Databases{
   val batchInsertGraph = statusSource via insertFlow.grouped(batchSize) to batchInsertSink
   val queueBatchInsert = insertGraph.run()
 
-  override def onStatus(status: Status) = {
+  override def onStatus(status: Status) =
     Await.result(queueBatchInsert.offer(status), Duration.Inf)
-    //    println(status.getText())
-  }
 }
