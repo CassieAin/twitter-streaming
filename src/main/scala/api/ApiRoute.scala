@@ -66,6 +66,6 @@ trait ApiRoute extends Databases with FailFastCirceSupport {
               result => complete(result.asJson)
             }
           }
-      }
+      } 
     }
 }
